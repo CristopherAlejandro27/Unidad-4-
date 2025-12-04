@@ -21,7 +21,7 @@ class RegistroAlumnos(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Registro de Alumnos")
+        self.setWindowTitle("Registro de Alumnos") 
         self.resize(350, 180)
 
         # ------------------ Widgets ------------------
@@ -37,10 +37,6 @@ class RegistroAlumnos(QWidget):
         # Botón Limpiar (opcional)
         self.limpiar_btn = QPushButton("Limpiar", self)
         self.limpiar_btn.clicked.connect(self.limpiar_campos)
-
-        #Edad atributo
-        self.edad_edit = QLineEdit(self)
-        self.edad_edit.setPlaceholderText("Ej.: 24")
 
         # ------------------ Layout -------------------
         form_layout = QVBoxLayout()
@@ -64,13 +60,6 @@ class RegistroAlumnos(QWidget):
         botones_layout.addWidget(self.limpiar_btn)
         form_layout.addLayout(botones_layout)
 
-        # Edad
-        fila_edad = QHBoxLayout()
-        fila_edad.addWidget(QLabel("Edad:", self))
-        fila_edad.addWidget(self.edad_edit)
-        form_layout.addLayout(fila_edad)
-
-
         self.setLayout(form_layout)
 
         # Ruta del archivo donde se guardarán los datos
@@ -80,25 +69,17 @@ class RegistroAlumnos(QWidget):
     def guardar_alumno(self):
         nombre = self.nombre_edit.text().strip()
         carrera = self.carrera_edit.text().strip()
-        edad_str = self.edad_edit.text().strip()
 
         if not nombre or not carrera:
             QMessageBox.warning(
                 self,
                 "Campos incompletos",
-                "Debes rellenar tanto el nombre, edad y la carrera.",
+                "Debes rellenar tanto el nombre como la carrera.",
             )
             return
 
-        edad_str = int(edad_str)
+        linea = f"{nombre} – {carrera}\n"
 
-        linea = f"{nombre} – {carrera}\n – {edad_str} años"
-        if edad_str >= 18:
-            QMessageBox.information(
-                self,
-                "Mayor de edad",
-                f"{nombre} tiene {edad_str} años y es mayor de edad!",
-                )
         try:
             with self.ruta_archivo.open("a", encoding="utf-8") as f:
                 f.write(linea)
@@ -121,7 +102,6 @@ class RegistroAlumnos(QWidget):
         self.nombre_edit.clear()
         self.carrera_edit.clear()
         self.nombre_edit.setFocus()
-        self.nombre_edit.clear()
 
 
 if __name__ == "__main__":
